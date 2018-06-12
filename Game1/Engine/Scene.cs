@@ -47,13 +47,9 @@ namespace Game1.Engine
                 Sprite spr = gameObjects[i].GetComponent<Sprite>();
                 if (spr != null)
                 {
-                    sprBatch.Draw(spr.Image, 
-                        gameObjects[i].GetRectangle(),
-                        new Rectangle(0, 0, spr.Image.Width, spr.Image.Height), 
-                        spr.Color, MathHelper.ToRadians(gameObjects[i].Rotation), spr.Origin, SpriteEffects.None, 0);
+					spr.DrawSprite(sprBatch);
                 }
 			}
-
         }
     }
 }

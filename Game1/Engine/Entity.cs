@@ -1,28 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using Game1.Engine;
 
 namespace Game1.Engine
 {
     public class Entity
     {
-        public ulong ID;
+		public int ID = Noise.Generate(int.MaxValue);
+		public string name;
         public Vector2 Position;
         public float Rotation;
         public Vector2 Scale;
         public List<Component> Components;
 
-        public Rectangle GetRectangle()
-        {
-            return new Rectangle(
-                (int)Position.X, (int)Position.Y, 
-                (int)Scale.X, (int)Scale.Y);
-        }
-
-        public Entity()
+        #region Constructors
+		public Entity()
         {
             Components = new List<Component>();
             Position = Vector2.Zero;
@@ -46,43 +38,48 @@ namespace Game1.Engine
             Scale = scale;
             AddComponent(component);
         }
+        #endregion
 
-        public Entity(Component component)
+		#region Component Management
+		public T AddComponent<T>(T component) where T : Component
         {
-            Components = new List<Component>();
-            Position = Vector2.Zero;
-            Scale = Vector2.One;
-            Rotation = 0;
-            AddComponent(component);
+			component.Entity = this;
+			Components.Add(component);
+			component.Initialize();
+			return (component);
         }
 
-        public void AddComponent<T>(T t) where T : Component
-        {
-            Components.Add(t);
-        }
-
-        public void RemoveComponent(Component component)
-        {
-           if (Components.Remove(component) == false)
-            {
-                Console.WriteLine("ERROR: Can't remove component {1} on {2}", 
-                    this.ID, component.ToString());
-            }
-        }
-
-        public T GetComponent<T>() where T : Component
+		public T GetComponent<T>() where T : Component
         {
             foreach (Component component in Components)
             {
                 if (component.GetType() == typeof(T))
                     return (component as T);
             }
-            return (null); 
+            return (null);
         }
+
+		public bool RemoveComponent<T>() where T : Component
+		{
+			Component component = GetComponent<T>();
+			if (component != null)
+			{
+				RemoveComponent(component);
+				return true;
+			}	
+			return false;
+		}
+
+        public void RemoveComponent(Component component)
+        {
+			Components.Remove(component);
+        }
+        #endregion
 
 		public virtual void Update(GameTime gameTime)
 		{
-			
+			for (int i = 0; i < Components.Count; i++)
+				Components[i].Update();
 		}
     }
 }

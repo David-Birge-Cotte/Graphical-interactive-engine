@@ -39,9 +39,8 @@ namespace Game1.Engine
 
         public static Vector2 Normalized(Vector2 vector)
         {
-            Vector2 ret = vector;
-            ret.Normalize();
-            return (ret);
+			vector.Normalize();
+			return (vector);
         }
 
         public static Vector2 Normalize(ref Vector2 vector)

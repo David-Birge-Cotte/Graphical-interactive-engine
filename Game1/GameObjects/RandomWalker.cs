@@ -24,7 +24,7 @@ namespace Game1.GameObjects
             base.Update(gameTime);
 
             Vector2 moveVector;
-            int rngVal = Global.Noiser.Generate(4);
+			int rngVal = Noise.Generate(4);
 
             switch (rngVal)
             {

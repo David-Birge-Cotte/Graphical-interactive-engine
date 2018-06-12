@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Game1.Engine;
-using Game1.Engine.Physics;
 using Game1.GameObjects;
 
 namespace Game1
