@@ -14,8 +14,8 @@ namespace Game1.Engine
         private float _rotation;
         private float _zoom;
         private Viewport _viewport;
-        private float _minZoom = 0.2f;
-        private float _maxZoom = 10;
+        private float _minZoom = 0.01f;
+        private float _maxZoom = 100;
 
         // public fields
         public Vector2 Position { get => _position; set => _position = value; }
@@ -34,7 +34,7 @@ namespace Game1.Engine
         }
 
         // constructor
-        public Camera(Viewport viewport, Vector2 pos, float rot = 0, float zoom = 1)
+        public Camera(Viewport viewport, Vector2 pos = new Vector2(), float rot = 0, float zoom = 1)
         {
             _viewport = viewport;
             Position = pos;
@@ -44,6 +44,11 @@ namespace Game1.Engine
             if (Camera.main == null)
                 Camera.main = this;
         }
+        
+		public void SetAsMain()
+		{
+			main = this;
+		}
 
         public void Rotate(float rot)
         {
@@ -52,7 +57,7 @@ namespace Game1.Engine
 
         public void Move(Vector2 mvt)
         {
-            Position += mvt * Zoom;
+            Position += mvt / Zoom;
         }
 
         public Matrix GetTransformation()
@@ -66,7 +71,6 @@ namespace Game1.Engine
                     _viewport.Height * 0.5f, 0)
             );
         }
-
         
 		public Vector2 ScreenToWorld(Vector2 pos)
         {

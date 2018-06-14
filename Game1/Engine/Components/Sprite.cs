@@ -12,16 +12,6 @@ namespace Game1.Engine
 		public float SortingOrder;
 		public Vector2 Origin;
 
-		private Rectangle ScreenRect
-		{
-			get
-			{
-				return new Rectangle(
-					(int)Entity.Position.X, (int)Entity.Position.Y,
-					(int)Entity.Scale.X, (int)Entity.Scale.Y);
-			}
-		}
-
 		#region Constructors
 		public Sprite(Texture2D image = null, Color color = new Color(), int size = 16, float sortingOrder = 0)
 		{
@@ -45,12 +35,16 @@ namespace Game1.Engine
 
 		public void DrawSprite(SpriteBatch sprBatch)
 		{
+			int wtds = Global.WorldToDrawScale;
+
 			sprBatch.Draw(
 				Image,
-				ScreenRect,
-				new Rectangle(0, 0, Image.Width, Image.Height),
+				new Rectangle(
+					new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)), 
+					new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds))),
+				null,
 				Color,
-				MathHelper.ToRadians(Entity.Rotation),
+				(Entity.Rotation),
 				Origin,
 				SpriteEffects.None, 0);
 		}

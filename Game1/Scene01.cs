@@ -4,75 +4,76 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using tainicom.Aether.Physics2D.Collision;
+using tainicom.Aether.Physics2D.Dynamics;
+
 using Game1.Engine;
-using Game1.GameObjects; 
+using Game1.GameObjects;
 
 namespace Game1
 {
     class Scene01 : Scene
     {
-        private int entityNb = 100;
-		private List<Entity> entities;
-        
-        public Scene01() : base()
-        {
-            camera = new Camera(Global.Game.GraphicsDevice.Viewport, Vector2.Zero, 0, 0.5f);
-			entities = new List<Entity>();
+        private int entityNb = 20;
 
-			RandomFlies();
+		public Scene01() : base()
+		{
+			//RandomFlies();
+			camera.Zoom = 0.1f;
+
+			Instantiate(new Entity());
+			gameObjects[0].Position = new Vector2(0, 10);
+			gameObjects[0].Scale = new Vector2(50, 1);
+			gameObjects[0].AddComponent(new Sprite());
+			gameObjects[0].AddComponent(new RigidBody(world, Shape.Rectangle, BodyType.Kinematic));
+			//gameObjects[lastNb].GetComponent<RigidBody>().IgnoreGravity = true;
+
+            
+			Instantiate(new SimplePhysicsEntity());
+			gameObjects[1].GetComponent<RigidBody>().Position = new Vector2(0, -5);
+			Instantiate(new SimplePhysicsEntity());         
         }
 
         public void RandomFlies()
         {
             for (int i = 0; i < entityNb; i++)
             {
-				entities.Add(Instantiate(new SteeringEntity()));
-				entities[i].Position = new Vector2(Noise.Gaussian(-Global.WinWidth / 2, Global.WinWidth / 2) * 1.5f,
-				                                   Noise.Gaussian(-Global.WinHeight / 2, Global.WinHeight / 2) * 1.5f);
-				entities[i].GetComponent<RigidBody>().Mass = Noise.Gaussian(10, 60);
-				float scale = entities[i].GetComponent<RigidBody>().Mass;
-                entities[i].Scale = new Vector2(scale, scale);
+				Instantiate(new SteeringEntity());
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            /*foreach (Entity phyEn in gameObjects)
-            {
-                PhysicsEntity en = phyEn as PhysicsEntity;
-                if (en != null)
-                    en.AddForce(Vector2.UnitX + -Vector2.UnitY * 0.25f);
-            }
+			float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+			if(InputManager.Space)
 			{
-				Vector2 mousePos = Camera.main.ScreenToWorld(Mouse.GetState().Position.ToVector2());
-				Console.WriteLine($"MousePos = {mousePos}");
-
-				foreach (var en in entities)
-				{
-					if (en.GetComponent<BoxCollider>() != null
-					    && Collision.IsColliding(mousePos, en.GetComponent<BoxCollider>()))
-						Console.WriteLine($"Collision with {en.ID}");
-				}
+				Instantiate(new SimplePhysicsEntity());
+				gameObjects[gameObjects.Count - 1].GetComponent<RigidBody>().Position = Global.WorldMousePos;
 			}
 
-			float speed = 1;
-			Vector2 oldPos = entities[1].Position;
+			if (Keyboard.GetState().IsKeyDown(Keys.Q))
+				gameObjects[0].GetComponent<RigidBody>().SetAngularVelocity(-deltaTime * 10);
+			else if (Keyboard.GetState().IsKeyDown(Keys.D))
+				gameObjects[0].GetComponent<RigidBody>().SetAngularVelocity(deltaTime * 10);
+			else
+				gameObjects[0].GetComponent<RigidBody>().SetAngularVelocity(0);
 
-			if(InputManager.Right)         
-				entities[1].Position += new Vector2(speed, 0);
-			if (InputManager.Left)
-                entities[1].Position += new Vector2(-speed, 0);
+			int camSpeed = 300;
+
 			if (InputManager.Up)
-				entities[1].Position += new Vector2(0, -speed);
+				camera.Move(-Vector2.UnitY * deltaTime * camSpeed);
 			if (InputManager.Down)
-				entities[1].Position += new Vector2(0, speed);
+				camera.Move(Vector2.UnitY * deltaTime * camSpeed);
+			if (InputManager.Left)
+				camera.Move(-Vector2.UnitX * deltaTime * camSpeed);
+			if (InputManager.Right)
+				camera.Move(Vector2.UnitX * deltaTime * camSpeed);
 
-			if (Collision.IsColliding(entities[0].GetComponent<BoxCollider>(), entities[1].GetComponent<BoxCollider>()))
-                entities[1].Position = oldPos;*/
-            
-            base.Update(gameTime);
+			if (InputManager.IsScrolling)
+				camera.Zoom += InputManager.ScrollValue * 0.0001f;
+         
+			base.Update(gameTime);
         }
     }
 }

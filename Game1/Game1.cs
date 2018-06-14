@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 using Game1.Engine;
 using Game1.GameObjects;
@@ -19,12 +20,17 @@ namespace Game1
 
         public Game1()
         {
+			Global.Game = this;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Global.Game = this;
             IsMouseVisible = true;
+			IsFixedTimeStep = true;
+			TargetElapsedTime = TimeSpan.FromSeconds(1d / Global.TargetFrameRate);
+            
+			graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.PreferredBackBufferWidth = Global.WinWidth;
             graphics.PreferredBackBufferHeight = Global.WinHeight;
+            graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
         }
 
@@ -87,7 +93,7 @@ namespace Game1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Global.BackgroundColor);
-
+                     
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                         BlendState.AlphaBlend,
                         null,

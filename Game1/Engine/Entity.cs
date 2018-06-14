@@ -12,7 +12,8 @@ namespace Game1.Engine
         public float Rotation;
         public Vector2 Scale;
         public List<Component> Components;
-
+		public Scene Scene;
+        
         #region Constructors
 		public Entity()
         {
@@ -40,11 +41,16 @@ namespace Game1.Engine
         }
         #endregion
 
+		public virtual void Initialize()
+		{
+			
+		}
+
 		#region Component Management
 		public T AddComponent<T>(T component) where T : Component
         {
-			component.Entity = this;
 			Components.Add(component);
+			component.Entity = this;
 			component.Initialize();
 			return (component);
         }
@@ -81,5 +87,14 @@ namespace Game1.Engine
 			for (int i = 0; i < Components.Count; i++)
 				Components[i].Update();
 		}
-    }
+
+		public virtual void OnDestroy()
+		{
+			for (int i = 0; i < Components.Count; i++)
+			{
+				Components[i].OnDestroy();
+			}
+		}
+
+	}
 }

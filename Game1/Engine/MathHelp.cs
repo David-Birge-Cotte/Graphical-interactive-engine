@@ -28,12 +28,10 @@ namespace Game1.Engine
             return (val);
         }
 
-        public static Vector2 Limit(Vector2 val, Vector2 low, Vector2 high)
+		public static Vector2 Limit(this Vector2 val, float high)
         {
-            if (val.LengthSquared() < low.LengthSquared())
-                return (low);
-            else if (val.LengthSquared() > high.LengthSquared())
-                return (high);
+            if (val.Length() > high)
+				return (SetMagnitude(val, high));
             return (val);
         }
 
@@ -43,17 +41,11 @@ namespace Game1.Engine
 			return (vector);
         }
 
-        public static Vector2 Normalize(ref Vector2 vector)
+        public static Vector2 SetMagnitude(this Vector2 vector, float mag)
         {
-            vector.Normalize();
-            return (vector);
-        }
-
-        public static Vector2 SetMagnitude(Vector2 vector, float mag)
-        {
-            Vector2 vec = Normalized(vector);
-            vec *= mag;
-            return (vec);
+			vector.Normalize();
+			vector *= mag;
+			return (vector);
         }
 
         public static int Map(int inputStart, int inputEnd, int outputStart, int outputEnd, int input)

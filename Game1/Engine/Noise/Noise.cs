@@ -79,10 +79,12 @@ namespace Game1.Engine
         {
             return new Color(Generate(255), Generate(255), Generate(255), Generate(255));
         }
-
-		public static Color RandomGaussianColor()
+        
+		public static Color RandomGaussianColor(bool alpha = false)
         {
-            return new Color(Gaussian(0, 255), Gaussian(0, 255), Gaussian(0, 255), Gaussian(0, 255));
+			if(alpha)
+                return new Color(Gaussian(0, 255), Gaussian(0, 255), Gaussian(0, 255), Gaussian(0, 255));
+			return new Color(Gaussian(0, 255), Gaussian(0, 255), Gaussian(0, 255), 255);
         }
     }
 }

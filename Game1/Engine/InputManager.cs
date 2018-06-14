@@ -18,7 +18,7 @@ namespace Game1.Engine
         {
             get => Mouse.GetState().ScrollWheelValue - _scrollSinceStartup;
         }
-		public static bool Scrolling
+		public static bool IsScrolling
         {
             get => (Math.Abs(ScrollValue) > 0);
         }
@@ -26,23 +26,19 @@ namespace Game1.Engine
         // Keyboard
 		public static bool Right
         { 
-            get => (Keyboard.GetState().IsKeyDown(Keys.Right)
-                    || Keyboard.GetState().IsKeyDown(Keys.D));
+			get => (Keyboard.GetState().IsKeyDown(Keys.Right));
         }
 		public static bool Left
         {
-            get => (Keyboard.GetState().IsKeyDown(Keys.Left)
-			        || Keyboard.GetState().IsKeyDown(Keys.Q));
+		    get => (Keyboard.GetState().IsKeyDown(Keys.Left));
         }
 		public static bool Up
         {
-            get => (Keyboard.GetState().IsKeyDown(Keys.Up)
-			        || Keyboard.GetState().IsKeyDown(Keys.Z));
+		    get => (Keyboard.GetState().IsKeyDown(Keys.Up));
         }
 		public static bool Down
         {
-            get => (Keyboard.GetState().IsKeyDown(Keys.Down)
-                    || Keyboard.GetState().IsKeyDown(Keys.S));
+		    get => (Keyboard.GetState().IsKeyDown(Keys.Down));
         }
 		public static bool Space
         {

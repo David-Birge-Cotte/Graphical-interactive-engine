@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Game1.Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Game1.GameObjects
 {
@@ -18,28 +13,57 @@ namespace Game1.GameObjects
 
         public SteeringEntity() : base()
         {
-			Position = new Vector2(Noise.Gaussian(-Global.WinWidth / 2, Global.WinWidth / 2) * 1.5f,
-			                       Noise.Gaussian(-Global.WinHeight / 2, Global.WinHeight / 2) * 1.5f);
-			sprite = AddComponent(new Sprite());
-			sprite.Color = Noise.RandomGaussianColor();
-			rb2d = AddComponent(new RigidBody());
 
-
-			rb2d.Mass = Noise.Gaussian(40, 50);
-			Scale = new Vector2(rb2d.Mass, rb2d.Mass);
-            
-			rb2d.MaximumForce = 10;
-			rb2d.MaximumVelocity = 100;
         }
-        
-        public override void Update(GameTime gameTime)
+
+		public override void Initialize()
+		{
+			Position = new Vector2(Noise.Gaussian(-10, 10), Noise.Gaussian(-5, 0));
+
+            sprite = AddComponent(new Sprite());
+            sprite.Color = Noise.RandomGaussianColor();
+            
+			int mass = Noise.Gaussian(1, 5);
+			Scale = new Vector2(mass / 10f, mass / 10f);
+
+			rb2d = AddComponent(new RigidBody(Scene.world));
+			rb2d.Mass = mass;
+
+			rb2d.IgnoreGravity = true;
+
+			base.Initialize();
+		}
+
+		public override void Update(GameTime gameTime)
         {
             float gameTimeMult = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			//rb2d.AddForce(new Vector2(-1, 0));
-			rb2d.AddForce(Physics.Seek(rb2d, Global.WorldMousePos));
+
+			rb2d.AddForce(Seek(rb2d, Global.WorldMousePos));
 
             base.Update(gameTime);
+        }
+
+
+		public Vector2 Seek(RigidBody rigid, Vector2 target)
+        {
+            Vector2 desiredVelocity;
+            Vector2 steering;
+
+			desiredVelocity = target - rigid.Entity.Position;
+
+			/*float d = desiredVelocity.Length();
+            if (d < 100)
+            {
+                float m = MathHelp.Map(d, 0, 100, 0, rigid.MaximumVelocity);
+                desiredVelocity.SetMagnitude(m);
+            }
+            else*/
+				desiredVelocity.SetMagnitude(100);
+			
+            steering = desiredVelocity - rigid.Velocity;
+			steering.Limit(50);
+            return (steering);
         }
     }
 }

@@ -21,5 +21,10 @@ namespace Game1.Engine
         {
 
         }
+
+		public virtual void OnDestroy()
+		{
+			
+		}
     }
 }
