@@ -11,10 +11,10 @@ namespace Game1.Engine
 
         // private variables
         private Vector2 _position = Vector2.Zero;
-        private float _rotation;
+        private float _rotation; // in degrees
         private float _zoom;
         private Viewport _viewport;
-        private float _minZoom = 0.01f;
+        private float _minZoom = 0.005f;
         private float _maxZoom = 100;
 
         // public fields
@@ -63,7 +63,7 @@ namespace Game1.Engine
         public Matrix GetTransformation()
         {
             return (
-                Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) * 
+				Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) * 
                 Matrix.CreateRotationZ(MathHelper.ToRadians(Rotation)) * 
                 Matrix.CreateScale(Zoom, Zoom, 1) * 
                 Matrix.CreateTranslation(

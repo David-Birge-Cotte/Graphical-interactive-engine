@@ -19,9 +19,19 @@ namespace Game1.Engine
             return (generator.Next(high));
         }
 
+		public static int Generate(float high)
+        {
+			return (generator.Next((int)(high * 1000)) / 1000);
+        }
+
 		public static int Generate(int low, int high)
         {
             return (generator.Next(low, high));
+        }
+
+		public static int Generate(float low, float high)
+        {
+			return (generator.Next((int)(low * 1000), (int)(high * 1000)) / 1000);
         }
 
 		public static int[] Generate(int low, int high, int size)
@@ -33,6 +43,17 @@ namespace Game1.Engine
         }
 
 		public static int Gaussian(int low, int high, int numberOfSteps = 5, int deviation = 1, int mean = 0)
+        {
+            int ret = 0; ;
+            for (int i = 0; i < numberOfSteps; i++)
+                ret += Generate(low, high);
+            ret /= numberOfSteps;
+            ret *= deviation;
+            ret += mean;
+            return (ret);
+        }
+
+		public static int Gaussian(float low, float high, int numberOfSteps = 5, int deviation = 1, int mean = 0)
         {
             int ret = 0; ;
             for (int i = 0; i < numberOfSteps; i++)

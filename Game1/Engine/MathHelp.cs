@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 
@@ -31,7 +27,7 @@ namespace Game1.Engine
 		public static Vector2 Limit(this Vector2 val, float high)
         {
             if (val.Length() > high)
-				return (SetMagnitude(val, high));
+				return (val.SetMagnitude(high));
             return (val);
         }
 
@@ -47,6 +43,13 @@ namespace Game1.Engine
 			vector *= mag;
 			return (vector);
         }
+
+		public static Vector2 FromAngle(float angle)
+		{
+			return (new Vector2(
+				(float)Math.Cos(angle), 
+				(float)Math.Sin(angle)));
+		}
 
         public static int Map(int inputStart, int inputEnd, int outputStart, int outputEnd, int input)
         {

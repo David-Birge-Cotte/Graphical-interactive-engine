@@ -21,16 +21,18 @@ namespace Game1
         public Game1()
         {
 			Global.Game = this;
+            
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 			IsFixedTimeStep = true;
 			TargetElapsedTime = TimeSpan.FromSeconds(1d / Global.TargetFrameRate);
             
-			graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            graphics.PreferredBackBufferWidth = Global.WinWidth;
-            graphics.PreferredBackBufferHeight = Global.WinHeight;
+			graphics.GraphicsProfile = GraphicsProfile.HiDef; 
             graphics.PreferMultiSampling = true;
+			graphics.IsFullScreen = false;
+			graphics.PreferredBackBufferWidth = Global.WinWidth;
+            graphics.PreferredBackBufferHeight = Global.WinHeight;
             graphics.ApplyChanges();
         }
 

@@ -18,12 +18,12 @@ namespace Game1.GameObjects
 		public override void Initialize()
         {         
             sprite = AddComponent(new Sprite());
-            sprite.Color = Noise.RandomGaussianColor(true);
+            sprite.Color = Noise.RandomGaussianColor();
             
 			int mass = Noise.Gaussian(1, 5);
 			Scale = new Vector2(mass / 2f, mass / 2f);
 
-            rb2d = AddComponent(new RigidBody(Scene.world));
+			rb2d = AddComponent(new RigidBody(Scene.world, BodyShape.Rectangle));
 			rb2d.Mass = mass;
 
             base.Initialize();
@@ -31,14 +31,12 @@ namespace Game1.GameObjects
 
 		public override void Update(GameTime gameTime)
         {
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-         
-			Scale -= new Vector2(deltaTime * 0.2f);
-			if (Scale.LengthSquared() < 0.1f)
+			// Destroy self if falling outside of the world
+			if (Position.Y > 1000)
 			{
 				Scene.Destroy(this);
-			}
-				
+				return;
+			}         
 
 			base.Update(gameTime);
         }

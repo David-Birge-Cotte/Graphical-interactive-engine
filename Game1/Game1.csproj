@@ -67,6 +67,8 @@
     <Compile Include="Engine\Physics\Collision.cs" />
     <Compile Include="Engine\Physics\RigidBody.cs" />
     <Compile Include="GameObjects\SimplePhysicsEntity.cs" />
+    <Compile Include="GameObjects\FlowFieldFollowingEntity.cs" />
+    <Compile Include="Engine\FlowField.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

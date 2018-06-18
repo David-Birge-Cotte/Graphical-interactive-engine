@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Game1.Engine;
 using Microsoft.Xna.Framework;
 
@@ -10,6 +9,9 @@ namespace Game1.GameObjects
     {
 		RigidBody rb2d;
 		Sprite sprite;
+        
+		float maxForce = 50;
+		float maxSpeed = 1000;
 
         public SteeringEntity() : base()
         {
@@ -24,7 +26,7 @@ namespace Game1.GameObjects
             sprite.Color = Noise.RandomGaussianColor();
             
 			int mass = Noise.Gaussian(1, 5);
-			Scale = new Vector2(mass / 10f, mass / 10f);
+			Scale = new Vector2(mass / 2f, mass / 2f);
 
 			rb2d = AddComponent(new RigidBody(Scene.world));
 			rb2d.Mass = mass;
@@ -39,30 +41,22 @@ namespace Game1.GameObjects
             float gameTimeMult = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
-			rb2d.AddForce(Seek(rb2d, Global.WorldMousePos));
+			rb2d.AddForce(Seek(Global.WorldMousePos));
 
             base.Update(gameTime);
         }
 
 
-		public Vector2 Seek(RigidBody rigid, Vector2 target)
+		public Vector2 Seek(Vector2 target)
         {
             Vector2 desiredVelocity;
             Vector2 steering;
 
-			desiredVelocity = target - rigid.Entity.Position;
+			desiredVelocity = target - rb2d.Position;
+			desiredVelocity = desiredVelocity.SetMagnitude(maxSpeed);
 
-			/*float d = desiredVelocity.Length();
-            if (d < 100)
-            {
-                float m = MathHelp.Map(d, 0, 100, 0, rigid.MaximumVelocity);
-                desiredVelocity.SetMagnitude(m);
-            }
-            else*/
-				desiredVelocity.SetMagnitude(100);
-			
-            steering = desiredVelocity - rigid.Velocity;
-			steering.Limit(50);
+			steering = desiredVelocity - rb2d.Velocity;
+			steering = steering.Limit(maxForce);
             return (steering);
         }
     }

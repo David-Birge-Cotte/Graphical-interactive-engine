@@ -5,10 +5,11 @@ using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Collision.Shapes;
 using tainicom.Aether.Physics2D.Common;
 
-public enum Shape
+public enum BodyShape
 {
 	Rectangle,
-    Circle
+    Circle,
+    None
 }
 
 namespace Game1.Engine
@@ -39,16 +40,16 @@ namespace Game1.Engine
         {
 			get => _physicsBody.Rotation; set => _physicsBody.Rotation = value;
         }
-      
-		private Vector2 _size { get => Entity.Scale; }
 		private World _world;
-		private Shape _shape;
+		private BodyShape _shape;
 		private Body _physicsBody;
 		private BodyType _bodyType;
 
 		private Vector2 _currentSize;
+
+		private Vector2 _lastEntityPos;
         
-		public RigidBody(World world, Shape shape = Shape.Rectangle, BodyType bodyType = BodyType.Dynamic)
+		public RigidBody(World world, BodyShape shape = BodyShape.None, BodyType bodyType = BodyType.Dynamic)
         {
 			_world = world;
 			_shape = shape;
@@ -57,9 +58,9 @@ namespace Game1.Engine
 
 		public override void Initialize()
 		{
-			_currentSize = _size;
+			_currentSize = Entity.Scale;
 			_physicsBody = new Body();
-			CreateFixtureShape();
+			AddFixture();
             _physicsBody.SetFriction(0.3f);
             _physicsBody.SetRestitution(0.1f);
 			BodyType = _bodyType;
@@ -74,34 +75,84 @@ namespace Game1.Engine
 
 		public override void Update()
 		{
-			if (_physicsBody == null || Entity == null)
-				return;
+			// We should be able to move use Entity.Position in our code
+			if (_lastEntityPos != Entity.Position)
+				this.Position = Entity.Position;
 
+            // Update the position and rotation based on physics
 			Entity.Position = this.Position;
 			Entity.Rotation = this.Rotation;
 
-			if (_currentSize != _size)
-            {
-				_physicsBody.Remove(_physicsBody.FixtureList[0]);
-				CreateFixtureShape();
-            }
+            // Save the current position
+			_lastEntityPos = Entity.Position;
 
+            // If the Entity has been resized
+			if (_currentSize != Entity.Scale)
+				ResetFixture(); // Recreate the fixture
+			
 			base.Update();
 		}
 
-		private void CreateFixtureShape()
+        /// <summary>
+        /// Removes the current fixture and puts another one
+        /// </summary>
+		public void ResetFixture()
+		{
+			RemoveFixture();
+			AddFixture();
+		}
+
+        /// <summary>
+        /// Adds a new fixture to the body
+        /// </summary>
+		public void AddFixture()
+		{
+			if (_shape == BodyShape.None)
+				return;
+
+			_physicsBody.Add(CreateFixture());
+		}
+        
+        /// <summary>
+        /// Removes the current fixture
+        /// </summary>
+		public void RemoveFixture()
+        {
+			if (_physicsBody.FixtureList.Count == 0)
+				return;
+            _physicsBody.Remove(_physicsBody.FixtureList[0]);
+        }
+
+        /// <summary>
+        /// Returns a new fixture based on Entity and rigidbody parameters
+        /// </summary>
+		private Fixture CreateFixture()
 		{
 			Vertices vertices; 
 			PolygonShape shape;
 
-			if (_shape == Shape.Rectangle)
-				vertices = PolygonTools.CreateRectangle(_size.X / 2, _size.Y / 2);
+			if (_shape == BodyShape.Rectangle)
+				vertices = PolygonTools.CreateRectangle(Entity.Scale.X / 2, Entity.Scale.Y / 2);
+			else if (_shape == BodyShape.Circle)
+				vertices = PolygonTools.CreateCircle(Entity.Scale.X / 2, 16);
 			else
-				vertices = PolygonTools.CreateCircle(_size.X / 2, 16);
+				return null;
 
 			shape = new PolygonShape(vertices, 1);
-			_physicsBody.Add(new Fixture(shape));
+			return(new Fixture(shape));
 		}
+
+        /// <summary>
+        /// Called when the entity is beeing removed from the scene
+		/// Removes the physics body from the world
+        /// </summary>
+		public override void OnDestroy()
+        {
+            if (_physicsBody.World != null)
+                _world.Remove(_physicsBody);
+            _physicsBody = null;
+            base.OnDestroy();
+        }
 
 		public void AddForce(Vector2 force)
 		{
@@ -116,14 +167,6 @@ namespace Game1.Engine
 		public void SetAngularVelocity(float av)
 		{
 			_physicsBody.AngularVelocity = av;
-		}
-
-		public override void OnDestroy()
-		{
-			if(_physicsBody.World != null)
-			    _world.Remove(_physicsBody);
-			_physicsBody = null;
-			base.OnDestroy();
-		}
+		}      
 	}
 }
