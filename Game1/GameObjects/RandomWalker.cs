@@ -19,9 +19,9 @@ namespace Game1.GameObjects
             AddComponent<Sprite>(new Sprite());
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(float dt)
         {
-            base.Update(gameTime);
+            base.Update(dt);
 
             Vector2 moveVector;
 			int rngVal = Noise.Generate(4);

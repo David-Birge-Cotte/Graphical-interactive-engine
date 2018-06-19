@@ -17,7 +17,12 @@ namespace Game1.Engine
 			
 		}
 
-        public virtual void Update()
+        public virtual void Update(float dt)
+        {
+
+        }
+
+        public virtual void PostUpdate(float dt)
         {
 
         }

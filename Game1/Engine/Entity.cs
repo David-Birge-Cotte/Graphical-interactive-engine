@@ -7,12 +7,12 @@ namespace Game1.Engine
     public class Entity
     {
 		public int ID = Noise.Generate(int.MaxValue);
-		public string name;
+		public string Name;
         public Vector2 Position;
         public float Rotation;
         public Vector2 Scale;
         public List<Component> Components;
-		public Scene Scene;
+		public Scene Scene { get; protected set; }
         
         #region Constructors
 		public Entity()
@@ -45,6 +45,12 @@ namespace Game1.Engine
 		{
 			
 		}
+
+        public void ChangeScene(Scene scene)
+        {
+            // TODO change scene properly
+            Scene = scene;
+        }
 
 		#region Component Management
 		public T AddComponent<T>(T component) where T : Component
@@ -82,13 +88,19 @@ namespace Game1.Engine
         }
         #endregion
 
-		public virtual void Update(GameTime gameTime)
+		public virtual void Update(float dt)
 		{
 			for (int i = 0; i < Components.Count; i++)
-				Components[i].Update();
+				Components[i].Update(dt);
 		}
 
-		public virtual void OnDestroy()
+        public virtual void PostUpdate(float dt)
+        {
+            for (int i = 0; i < Components.Count; i++)
+                Components[i].PostUpdate(dt);
+        }
+
+        public virtual void OnDestroy()
 		{
 			for (int i = 0; i < Components.Count; i++)
 			{

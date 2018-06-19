@@ -46,7 +46,6 @@ namespace Game1.Engine
 		private BodyType _bodyType;
 
 		private Vector2 _currentSize;
-
 		private Vector2 _lastEntityPos;
         
 		public RigidBody(World world, BodyShape shape = BodyShape.None, BodyType bodyType = BodyType.Dynamic)
@@ -73,24 +72,27 @@ namespace Game1.Engine
 			base.Initialize();
 		}
 
-		public override void Update()
+		public override void Update(float dt)
 		{
 			// We should be able to move use Entity.Position in our code
 			if (_lastEntityPos != Entity.Position)
 				this.Position = Entity.Position;
 
+            // We should be able to change Entity.Scale too
+            if (_currentSize != Entity.Scale)
+            {
+                ResetFixture(); // Recreate the fixture
+                _currentSize = Entity.Scale;
+            }
+                
             // Update the position and rotation based on physics
-			Entity.Position = this.Position;
+            Entity.Position = this.Position;
 			Entity.Rotation = this.Rotation;
 
             // Save the current position
 			_lastEntityPos = Entity.Position;
 
-            // If the Entity has been resized
-			if (_currentSize != Entity.Scale)
-				ResetFixture(); // Recreate the fixture
-			
-			base.Update();
+			base.Update(dt);
 		}
 
         /// <summary>
@@ -109,7 +111,6 @@ namespace Game1.Engine
 		{
 			if (_shape == BodyShape.None)
 				return;
-
 			_physicsBody.Add(CreateFixture());
 		}
         

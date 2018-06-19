@@ -9,8 +9,8 @@ namespace Game1.GameObjects
   		RigidBody rb2d;
         Sprite sprite;
 
-		float maxForce = 10;
-        float maxSpeed = 10;
+		float _maxForce = 10;
+        float _maxSpeed = 10;
 
 		public FlowField FlowField;
 
@@ -19,52 +19,50 @@ namespace Game1.GameObjects
         }
 
 		public override void Initialize()
-        {         
+        {
+            // Adding a sprite
             sprite = AddComponent(new Sprite());
+            // Settings its color to a randomized but pleasing simple color
             sprite.Color = Noise.RandomGaussianColor();
-
-            int mass = Noise.Gaussian(1, 5);
-            Scale = new Vector2(mass / 4f, mass / 4f);
-
+            // Adding a physics body
             rb2d = AddComponent(new RigidBody(Scene.world));
+            // Generating a random mass and its square root
+            int mass = Noise.Gaussian(1, 5);
+            int sqrtMass = mass / mass;
+            // Changing the entity scale and physics mass
+            Scale = new Vector2(mass / mass, mass / mass);
             rb2d.Mass = mass;
-
+            // ignore gravity forces
             rb2d.IgnoreGravity = true;
 
             base.Initialize();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(float dt)
         {
-            float gameTimeMult = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Vector2 desiredVelocity = GetNoiseFieldVelocity();
+            desiredVelocity = desiredVelocity.SetMagnitude(_maxSpeed);
+            rb2d.AddForce(SteeringTo(desiredVelocity));
 
-			if (rb2d.Position.X < 0)
-				rb2d.Position = new Vector2(FlowField.Size - 1, rb2d.Position.Y);
-			if (rb2d.Position.X >= FlowField.Size)
-				rb2d.Position = new Vector2(0, rb2d.Position.Y);
-			if (rb2d.Position.Y < 0)
-			    rb2d.Position = new Vector2(rb2d.Position.X, FlowField.Size - 1);
-			if (rb2d.Position.Y >= FlowField.Size)
-				rb2d.Position = new Vector2(rb2d.Position.X, 0);
-
-            rb2d.AddForce(Seek());
-
-
-            base.Update(gameTime);
+            base.Update(dt);
         }
 
-
-        public Vector2 Seek()
+        private Vector2 GetNoiseFieldVelocity()
         {
-            Vector2 desiredVelocity;
+            int x = (int)rb2d.Position.X % FlowField.Size, y = (int)rb2d.Position.Y % FlowField.Size;
+            return FlowField.Grid[Math.Abs(x), Math.Abs(y)];
+        }
+
+        /// <summary>
+        /// Returns a steering force towards a position
+        /// </summary>
+        public Vector2 SteeringTo(Vector2 desiredVelocity)
+        {
             Vector2 steering;
-			int posx = (int)rb2d.Position.X, posy = (int)rb2d.Position.Y;
-			
-			desiredVelocity = FlowField.Grid[posx, posy];
-            desiredVelocity = desiredVelocity.SetMagnitude(maxSpeed);
-         
+            
             steering = desiredVelocity - rb2d.Velocity;
-            steering = steering.Limit(maxForce);
+            steering = steering.Limit(_maxForce);
+
 			return (steering);
         }
     }

@@ -36,17 +36,20 @@ namespace Game1.GameObjects
 			base.Initialize();
 		}
 
-		public override void Update(GameTime gameTime)
+		public override void Update(float dt)
         {
-            float gameTimeMult = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-
 			rb2d.AddForce(Seek(Global.WorldMousePos));
 
-            base.Update(gameTime);
+            base.Update(dt);
         }
 
 
+        // TODO refactor, use modular system
+        /// <summary>
+        /// OLD VERSION 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
 		public Vector2 Seek(Vector2 target)
         {
             Vector2 desiredVelocity;

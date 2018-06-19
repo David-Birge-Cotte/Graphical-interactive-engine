@@ -10,6 +10,7 @@ namespace Game1.Engine
     public class Scene
     {
         public Camera camera;
+        protected int ChunkSize = 16;
         protected InputManager inputManager;
 		protected List<Entity> gameObjects;
 		public World world;
@@ -23,22 +24,29 @@ namespace Game1.Engine
         }
         
         public virtual void Update(GameTime gameTime)
-        {         
-			// Update physics
-			world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
+        {
+            // Get Delta Time
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Update physics
+            world.Step(dt);
 
             // Update each entity
 			for (int i = 0; i < gameObjects.Count; i++)
-				gameObjects[i].Update(gameTime);
+				gameObjects[i].Update(dt);
+
+            //Post Update
+            for (int i = 0; i < gameObjects.Count; i++)
+                gameObjects[i].PostUpdate(dt);
 
             // Update for scrollwheel data
-			inputManager.Update(gameTime);
+            inputManager.Update(gameTime);
         }
 
         public Entity Instantiate(Entity entity)
         {
             gameObjects.Add(entity);
-			entity.Scene = this;
+			entity.ChangeScene(this);
 			entity.Initialize();
             return (entity);
         }

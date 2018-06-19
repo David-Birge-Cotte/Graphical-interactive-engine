@@ -29,7 +29,7 @@ namespace Game1.GameObjects
             base.Initialize();
         }
 
-		public override void Update(GameTime gameTime)
+		public override void Update(float dt)
         {
 			// Destroy self if falling outside of the world
 			if (Position.Y > 1000)
@@ -38,7 +38,7 @@ namespace Game1.GameObjects
 				return;
 			}         
 
-			base.Update(gameTime);
+			base.Update(dt);
         }
     }
 }
