@@ -9,8 +9,8 @@ namespace Game1.GameObjects
   		RigidBody rb2d;
         Sprite sprite;
 
-		float _maxForce = 10;
-        float _maxSpeed = 10;
+		float _maxForce = 50;
+        float _maxSpeed = 30;
 
 		public FlowField FlowField;
 
@@ -25,12 +25,11 @@ namespace Game1.GameObjects
             // Settings its color to a randomized but pleasing simple color
             sprite.Color = Noise.RandomGaussianColor();
             // Adding a physics body
-            rb2d = AddComponent(new RigidBody(Scene.world));
+            rb2d = AddComponent(new RigidBody(Scene.World));
             // Generating a random mass and its square root
             int mass = Noise.Gaussian(1, 5);
-            int sqrtMass = mass / mass;
             // Changing the entity scale and physics mass
-            Scale = new Vector2(mass / mass, mass / mass);
+            Scale = new Vector2(mass, mass);
             rb2d.Mass = mass;
             // ignore gravity forces
             rb2d.IgnoreGravity = true;

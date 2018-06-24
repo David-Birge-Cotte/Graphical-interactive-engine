@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework;
 
 namespace Game1.Engine
 {
+    /// <summary>
+    /// Simple collider component to use with UI or simple AABB collision
+    /// For real physics and collision, use the Rigidbody component
+    /// </summary>
 	public class Collider : Component
     {
 		public Vector2 Position { get { return (Entity.Position); }}

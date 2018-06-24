@@ -51,6 +51,13 @@ namespace Game1.Engine
 				(float)Math.Sin(angle)));
 		}
 
+        public static Vector2 ScalarProjection(Vector2 a, Vector2 b)
+        {
+            Vector2.Normalize(b);
+            b *= Vector2.Dot(a, b);
+            return (b);
+        }
+
         public static int Map(int inputStart, int inputEnd, int outputStart, int outputEnd, int input)
         {
             int slope = 1 * (outputEnd - outputStart) / (inputEnd - inputStart);

@@ -9,8 +9,9 @@ namespace Game1.Engine
 		// Public
 		public Texture2D Image;
 		public Color Color;
-		public float SortingOrder;
+		public float SortingOrder = 1;
 		public Vector2 Origin;
+        public bool scaleWithZoom = true;
 
 		#region Constructors
 		public Sprite(Texture2D image = null, Color color = new Color(), int size = 16, float sortingOrder = 0)
@@ -20,7 +21,6 @@ namespace Game1.Engine
 			else
 				Image = CreateTexture(size, size, Color.White);
 			Color = Color.White;
-			SortingOrder = 0;
 			SetDefaultOrigin();
 		}
 
@@ -28,25 +28,40 @@ namespace Game1.Engine
 		{
 			Image = CreateTexture(size, size, Color.White);
 			Color = Color.White;
-			SortingOrder = 0;
 			SetDefaultOrigin();
 		}
 		#endregion
 
 		public void DrawSprite(SpriteBatch sprBatch)
 		{
-			int wtds = Global.WorldToDrawScale;
+            Rectangle destRect;
 
-			sprBatch.Draw(
+            if (scaleWithZoom)
+            {
+                // For classic sprites
+                int wtds = Global.WorldToDrawScale;
+                destRect = new Rectangle(
+                    new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)),
+                    new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds)));
+            }  
+            else
+            {
+                // For UI sprites
+                destRect = new Rectangle(
+                    new Point((int)(Entity.Position.X), (int)(Entity.Position.Y)),
+                    new Point((int)(Entity.Scale.X), (int)(Entity.Scale.Y)));
+            }
+
+            // Draw to the SpriteBatch
+            sprBatch.Draw(
 				Image,
-				new Rectangle(
-					new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)), 
-					new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds))),
+                destRect,
 				null,
 				Color,
-				(Entity.Rotation),
+				Entity.Rotation,
 				Origin,
-				SpriteEffects.None, 0);
+				SpriteEffects.None, 
+                SortingOrder);
 		}
 
 		private Vector2 SetDefaultOrigin()

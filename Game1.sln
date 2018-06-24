@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game1", "Game1\Game1.csproj", "{B7DB1A59-35E1-4F76-9C7C-4434416BAEAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aether.Physics2D.PORTABLE45", "..\..\Downloads\Aether.Physics2D-1.3.1\Physics2D\Aether.Physics2D.PORTABLE45.csproj", "{D7449C73-0922-4CB8-B83A-F5CE2904BE14}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{B7DB1A59-35E1-4F76-9C7C-4434416BAEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7DB1A59-35E1-4F76-9C7C-4434416BAEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7DB1A59-35E1-4F76-9C7C-4434416BAEAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7449C73-0922-4CB8-B83A-F5CE2904BE14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7449C73-0922-4CB8-B83A-F5CE2904BE14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7449C73-0922-4CB8-B83A-F5CE2904BE14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7449C73-0922-4CB8-B83A-F5CE2904BE14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

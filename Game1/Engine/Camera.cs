@@ -8,18 +8,14 @@ namespace Game1.Engine
     {
         // singleton to current camera
         public static Camera main;
-
-        // private variables
-        private Vector2 _position = Vector2.Zero;
-        private float _rotation; // in degrees
         private float _zoom;
         private Viewport _viewport;
-        private float _minZoom = 0.005f;
+        private float _minZoom = 0.002f;
         private float _maxZoom = 100;
 
         // public fields
-        public Vector2 Position { get => _position; set => _position = value; }
-        public float Rotation { get => _rotation; set => _rotation = value; }
+        public Vector2 Position { get; private set; }
+        public float Rotation { get; private set; }
         public float Zoom
         { 
             get => _zoom;
@@ -75,7 +71,7 @@ namespace Game1.Engine
 		public Vector2 ScreenToWorld(Vector2 pos)
         {
 			return new Vector2(Position.X + (pos.X - _viewport.Width / 2) / Zoom, 
-			                   Position.Y + (pos.Y - _viewport.Height / 2) / Zoom);
+			                   Position.Y + (pos.Y - _viewport.Height / 2) / Zoom) / Global.WorldToDrawScale;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Game1.Engine
             {
                 if (x_ == FlowFields[i].x && y_ == FlowFields[i].y)
                 {
-                    if(Time != FlowFields[i].Time)
+                    if(FlowFields[i].Time != Time)
                         FlowFields[i].SetTimeAndGenerate(Time);                 
                     return FlowFields[i];
                 }

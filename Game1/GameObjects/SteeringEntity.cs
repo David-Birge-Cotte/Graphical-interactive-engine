@@ -28,7 +28,7 @@ namespace Game1.GameObjects
 			int mass = Noise.Gaussian(1, 5);
 			Scale = new Vector2(mass / 2f, mass / 2f);
 
-			rb2d = AddComponent(new RigidBody(Scene.world));
+			rb2d = AddComponent(new RigidBody(Scene.World));
 			rb2d.Mass = mass;
 
 			rb2d.IgnoreGravity = true;

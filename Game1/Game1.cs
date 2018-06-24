@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 
 using Game1.Engine;
 using Game1.GameObjects;
@@ -13,24 +14,26 @@ namespace Game1
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Scene mainScene; // This is where the game takes place
 
-        private Scene main;
-
+        /// <summary>
+        /// Initializes the game with compile-time settings
+        /// </summary>
         public Game1()
         {
 			Global.Game = this;
             
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = Global.IsCursorVisible;
 			IsFixedTimeStep = true;
 			TargetElapsedTime = TimeSpan.FromSeconds(1d / Global.TargetFrameRate);
-            
+
 			graphics.GraphicsProfile = GraphicsProfile.HiDef; 
             graphics.PreferMultiSampling = true;
-			graphics.IsFullScreen = false;
+			graphics.IsFullScreen = Global.IsFullscreen;
 			graphics.PreferredBackBufferWidth = Global.WinWidth;
             graphics.PreferredBackBufferHeight = Global.WinHeight;
             graphics.ApplyChanges();
@@ -44,8 +47,7 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            main = new Scene01();
+            mainScene = new Scene01(); // Starts the game
             base.Initialize();
         }
 
@@ -59,7 +61,16 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            
+            // have a loader for loading textures corresponding to the required scene etc..
+
+            // This is just a test to read a file
+            /*
+            string path = Global.AppPath;
+            if (String.Compare(path.Substring(path.Length - 1, 1), "\\") != 0)
+                path = path + "\\";
+            string fileText = File.ReadAllText(path + "data\\test.txt");
+            Console.WriteLine(fileText);
+            */
         }
 
         /// <summary>
@@ -79,12 +90,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-            main.Update(gameTime);
-
+            mainScene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -95,16 +101,19 @@ namespace Game1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Global.BackgroundColor);
-                     
+            
+            // Draw Game Objects in scene
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                         BlendState.AlphaBlend,
-                        null,
-                        null,
-                        null,
-                        null,
+                        null, null, null, null,
                         Camera.main.GetTransformation());
-            // TODO: Add your drawing code here
-            main.Draw(spriteBatch);
+            mainScene.DrawScene(spriteBatch);
+            spriteBatch.End();
+
+            // Draw UI on top
+            spriteBatch.Begin(SpriteSortMode.BackToFront,
+                        BlendState.AlphaBlend, null, null, null, null, null);
+            mainScene.DrawUI(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

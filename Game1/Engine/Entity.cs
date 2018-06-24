@@ -107,6 +107,5 @@ namespace Game1.Engine
 				Components[i].OnDestroy();
 			}
 		}
-
 	}
 }
