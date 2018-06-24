@@ -11,7 +11,7 @@ namespace Game1.Engine
 		public Color Color;
 		public float SortingOrder = 1;
 		public Vector2 Origin;
-        public bool scaleWithZoom = true;
+		public bool scaleWithZoom = true;
 
 		#region Constructors
 		public Sprite(Texture2D image = null, Color color = new Color(), int size = 16, float sortingOrder = 0)
@@ -34,34 +34,34 @@ namespace Game1.Engine
 
 		public void DrawSprite(SpriteBatch sprBatch)
 		{
-            Rectangle destRect;
+			Rectangle destRect;
 
-            if (scaleWithZoom)
-            {
-                // For classic sprites
-                int wtds = Global.WorldToDrawScale;
-                destRect = new Rectangle(
-                    new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)),
-                    new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds)));
-            }  
-            else
-            {
-                // For UI sprites
-                destRect = new Rectangle(
-                    new Point((int)(Entity.Position.X), (int)(Entity.Position.Y)),
-                    new Point((int)(Entity.Scale.X), (int)(Entity.Scale.Y)));
-            }
+			if (scaleWithZoom)
+			{
+				// For classic sprites
+				int wtds = Global.WorldToDrawScale;
+				destRect = new Rectangle(
+					new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)),
+					new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds)));
+			}  
+			else
+			{
+				// For UI sprites
+				destRect = new Rectangle(
+					new Point((int)(Entity.Position.X), (int)(Entity.Position.Y)),
+					new Point((int)(Entity.Scale.X), (int)(Entity.Scale.Y)));
+			}
 
-            // Draw to the SpriteBatch
-            sprBatch.Draw(
+			// Draw to the SpriteBatch
+			sprBatch.Draw(
 				Image,
-                destRect,
+				destRect,
 				null,
 				Color,
 				Entity.Rotation,
 				Origin,
 				SpriteEffects.None, 
-                SortingOrder);
+				SortingOrder);
 		}
 
 		private Vector2 SetDefaultOrigin()
@@ -93,6 +93,6 @@ namespace Game1.Engine
 
 			return texture;
 		}
-        #endregion
+		#endregion
 	}
 }

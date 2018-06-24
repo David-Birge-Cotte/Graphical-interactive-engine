@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Game1.Engine
 {
-    public class Component
-    {
+	public class Component
+	{
 		public Entity Entity;
 
 		public Component()
@@ -17,19 +17,19 @@ namespace Game1.Engine
 			
 		}
 
-        public virtual void Update(float dt)
-        {
+		public virtual void Update(float dt)
+		{
 
-        }
+		}
 
-        public virtual void PostUpdate(float dt)
-        {
+		public virtual void PostUpdate(float dt)
+		{
 
-        }
+		}
 
 		public virtual void OnDestroy()
 		{
 			
 		}
-    }
+	}
 }

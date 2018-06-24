@@ -12,44 +12,44 @@ namespace Game1.Engine
 
 		#region Forces      
 		public static Vector2 GetGravity(RigidBody rigid)
-        {
-            return (GravityVec * rigid.Mass * 0.1f);
-        }
+		{
+			return (GravityVec * rigid.Mass * 0.1f);
+		}
 
 		public static Vector2 Attract(RigidBody rb2d, RigidBody other)
-        {
-            if (rb2d.Equals(other))
-                return (Vector2.Zero);
+		{
+			if (rb2d.Equals(other))
+				return (Vector2.Zero);
 
-            float strength;
-            Vector2 force = other.Entity.Position - rb2d.Entity.Position;
-            float d = force.LengthSquared();
+			float strength;
+			Vector2 force = other.Entity.Position - rb2d.Entity.Position;
+			float d = force.LengthSquared();
 
-            d = MathHelp.Limit(d, 0, 10);
-            force.Normalize();
-            strength = (Physics.Gravity * rb2d.Mass * other.Mass) / d;
+			d = MathHelp.Limit(d, 0, 10);
+			force.Normalize();
+			strength = (Physics.Gravity * rb2d.Mass * other.Mass) / d;
 
-            return (force * strength);
-        }
+			return (force * strength);
+		}
 
 		public static Vector2 GetGravityAttraction(RigidBody rigid, RigidBody attractor)
-        {
-            if (rigid.Equals(attractor))
-                return (Vector2.Zero);
+		{
+			if (rigid.Equals(attractor))
+				return (Vector2.Zero);
 
-            float strength;
-            Vector2 force = attractor.Entity.Position - rigid.Entity.Position;
-            float d = force.LengthSquared();
+			float strength;
+			Vector2 force = attractor.Entity.Position - rigid.Entity.Position;
+			float d = force.LengthSquared();
 
-            if (d < 10) // TODO find a cleaner solution
-                d = 10;
+			if (d < 10) // TODO find a cleaner solution
+				d = 10;
 
-            force.Normalize();
-            strength = (Gravity * rigid.Mass * attractor.Mass) / d;
+			force.Normalize();
+			strength = (Gravity * rigid.Mass * attractor.Mass) / d;
 
-            return (force * strength);
-        }
-      
+			return (force * strength);
+		}
+	  
 		public static Vector2 GetFriction(RigidBody rigid, float c = 0.1f)
 		{
 			Vector2 friction;
@@ -79,6 +79,6 @@ namespace Game1.Engine
 					 MathHelp.Normalized(rigid.Velocity);
 			return (drag);
 		}
-        #endregion
+		#endregion
 	}
 }
