@@ -19,7 +19,7 @@ namespace Game1
             flowFieldM = new FlowFieldManager();
             Camera.Zoom = 0.1f;
 
-            Button btn = (Button)Instantiate(new Button(new Vector2(Global.WinWidth - 70, Global.WinHeight - 30)));
+            Button btn = (Button)UIManager.Instantiate(new Button(new Vector2(Global.WinWidth - 70, Global.WinHeight - 30)));
             btn.Scale = new Vector2(100, 30);
 
             InstantiateEntities();

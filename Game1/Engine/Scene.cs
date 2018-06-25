@@ -17,7 +17,7 @@ namespace Game1.Engine
 		protected int chunkSize = 16;
 		protected InputManager inputManager;
 		protected List<Entity> gameObjects;
-		protected List<UIElement> UIElements;
+        protected UIManager UIManager;
 
 		/// <summary>
 		/// Initializes a new scene
@@ -27,7 +27,7 @@ namespace Game1.Engine
 			Camera = new Camera(Global.Game.GraphicsDevice.Viewport);
 			inputManager = new InputManager();
 			gameObjects = new List<Entity>();
-			UIElements = new List<UIElement>();
+            UIManager = new UIManager(this);
 			World = new World(Physics.GravityVec);
 		}
 		
@@ -47,22 +47,18 @@ namespace Game1.Engine
 			// Scene entities
 			for (int i = 0; i < gameObjects.Count; i++)
 				gameObjects[i].Update(dt);
-			// UI entities
-			for (int i = 0; i < UIElements.Count; i++)
-				UIElements[i].Update(dt);
-			#endregion
+            UIManager.Update(dt);
+            #endregion
 
-			#region PostUpdate function
-			// Scene entities
-			for (int i = 0; i < gameObjects.Count; i++)
+            #region PostUpdate function
+            // Scene entities
+            for (int i = 0; i < gameObjects.Count; i++)
 				gameObjects[i].PostUpdate(dt);
-			// UI entities
-			for (int i = 0; i < UIElements.Count; i++)
-				UIElements[i].PostUpdate(dt);
-			#endregion
+            UIManager.PostUpdate(dt);
+            #endregion
 
-			// Update the inputmanager for scrollwheel data
-			inputManager.Update(gameTime);
+            // Update the inputmanager for scrollwheel data
+            inputManager.Update(gameTime);
 		}
 
 		/// <summary>
@@ -79,19 +75,6 @@ namespace Game1.Engine
 		}
 
 		/// <summary>
-		/// Adds an UI element to the scene and initialize it
-		/// </summary>
-		/// <param name="UIElement"></param>
-		/// <returns></returns>
-		public UIElement Instantiate(UIElement UIElement)
-		{
-			UIElements.Add(UIElement);
-			UIElement.ChangeScene(this);
-			UIElement.Initialize();
-			return (UIElement);
-		}
-
-		/// <summary>
 		/// Removes an entity from the scene
 		/// </summary>
 		/// <param name="entity"></param>
@@ -103,40 +86,36 @@ namespace Game1.Engine
 			entity.OnDestroy();
 		}
 
-		public void Destroy(UIElement UIElement)
-		{
-			if (!gameObjects.Contains(UIElement))
-				throw new Exception($"UIElement {UIElement.Name} is not in the UIElement list<UIElement>");
-			gameObjects.Remove(UIElement);
-			UIElement.OnDestroy();
-		}
-
 		/// <summary>
-		/// Draws the scene to a sprite batch
+		/// Draw the scene to the screen. Called by Game
 		/// </summary>
 		/// <param name="sprBatch"></param>
 		public void DrawScene(SpriteBatch sprBatch)
 		{
-			for (int i = 0; i < gameObjects.Count; i++)
-			{
-				Sprite spr = gameObjects[i].GetComponent<Sprite>();
-				if (spr != null)
-					spr.DrawSprite(sprBatch);
-			}
+            // Draw Game Objects in scene
+            sprBatch.Begin(
+                SpriteSortMode.BackToFront,
+                BlendState.AlphaBlend, null, null, null, null,
+                Camera.main.GetTransformation());
+            DrawEntities(sprBatch); // Draw the scene
+            sprBatch.End();
+
+            // Draw UI on top
+            sprBatch.Begin(
+                SpriteSortMode.BackToFront,
+                BlendState.AlphaBlend, null, null, null, null, null);
+            UIManager.Draw(sprBatch); // Draw the UI
+            sprBatch.End();
 		}
 
-		/// <summary>
-		/// Draws the UI to a sprite batch
-		/// </summary>
-		/// <param name="sprBatch"></param>
-		public void DrawUI(SpriteBatch sprBatch)
-		{
-			for (int i = 0; i < UIElements.Count; i++)
-			{
-				Sprite spr = UIElements[i].GetComponent<Sprite>();
-				if (spr != null)
-					spr.DrawSprite(sprBatch);
-			}
-		}
+        private void DrawEntities(SpriteBatch sprBatch)
+        {
+            for (int i = 0; i < gameObjects.Count; i++)
+            {
+                Sprite spr = gameObjects[i].GetComponent<Sprite>();
+                if (spr != null)
+                    spr.DrawSprite(sprBatch);
+            }
+        }
 	}
 }

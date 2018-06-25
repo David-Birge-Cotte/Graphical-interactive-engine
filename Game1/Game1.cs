@@ -47,7 +47,8 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            mainScene = new Scene01(); // Starts the game
+            // Starts the game scene
+            mainScene = new Scene01();
             base.Initialize();
         }
 
@@ -90,6 +91,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Updates the game scene
             mainScene.Update(gameTime);
             base.Update(gameTime);
         }
@@ -100,22 +102,10 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            // Clears the screen to a flat color
             GraphicsDevice.Clear(Global.BackgroundColor);
-            
-            // Draw Game Objects in scene
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                        BlendState.AlphaBlend,
-                        null, null, null, null,
-                        Camera.main.GetTransformation());
+            // Draws the scene to the screen
             mainScene.DrawScene(spriteBatch);
-            spriteBatch.End();
-
-            // Draw UI on top
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                        BlendState.AlphaBlend, null, null, null, null, null);
-            mainScene.DrawUI(spriteBatch);
-            spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }
