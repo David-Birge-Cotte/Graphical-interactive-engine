@@ -19,9 +19,9 @@ namespace Game1.Engine
 			return (generator.Next(high));
 		}
 
-		public static int Generate(float high)
+		public static float Generate(float high)
 		{
-			return (generator.Next((int)(high * 1000)) / 1000);
+			return (generator.Next((int)(high * 1000)) / 1000f);
 		}
 
 		public static int Generate(int low, int high)
@@ -29,9 +29,9 @@ namespace Game1.Engine
 			return (generator.Next(low, high));
 		}
 
-		public static int Generate(float low, float high)
+		public static float Generate(float low, float high)
 		{
-			return (generator.Next((int)(low * 1000), (int)(high * 1000)) / 1000);
+			return (generator.Next((int)(low * 10000), (int)(high * 10000)) / 10000f);
 		}
 
 		public static int[] Generate(int low, int high, int size)
@@ -57,7 +57,7 @@ namespace Game1.Engine
 		{
 			int ret = 0; ;
 			for (int i = 0; i < numberOfSteps; i++)
-				ret += Generate(low, high);
+				ret += (int)Generate(low, high);
 			ret /= numberOfSteps;
 			ret *= deviation;
 			ret += mean;
@@ -89,11 +89,6 @@ namespace Game1.Engine
 			for (int i = 0; i < size; i++)
 				tab[i] = MonteCarlo(low, high);
 			return (tab);
-		}
-
-		public static Vector2 RandomVector2()
-		{
-			return new Vector2(Generate(100) - 50, Generate(100) - 50);
 		}
 
 		public static Color RandomColor()

@@ -100,6 +100,11 @@ namespace Game1.Engine
 				Components[i].PostUpdate(dt);
 		}
 
+        public void Destroy()
+        {
+            this.Scene.Destroy(this);
+        }
+
 		public virtual void OnDestroy()
 		{
 			for (int i = 0; i < Components.Count; i++)

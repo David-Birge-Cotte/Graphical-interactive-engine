@@ -77,5 +77,10 @@ namespace Game1.Engine
 				(float)(r * Math.Cos(a))
 				);
 		}
+
+        public static int Sign(float input)
+        {
+            return (input >= 0 ? 1 : -1);
+        }
 	}
 }

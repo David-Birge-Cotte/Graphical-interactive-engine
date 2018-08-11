@@ -14,15 +14,21 @@ namespace Game1
         private FlowFieldManager flowFieldM;
 		private int _camSpeed = 300;
 
+        private Entity en;
+
 		public Scene01() : base()
 		{
             flowFieldM = new FlowFieldManager();
             Camera.Zoom = 0.1f;
 
-            Button btn = (Button)UIManager.Instantiate(new Button(new Vector2(Global.WinWidth - 70, Global.WinHeight - 30)));
-            btn.Scale = new Vector2(100, 30);
-
             InstantiateEntities();
+
+            //en = Instantiate(new Entity());
+            //en.AddComponent(new RigidBody(World, BodyShape.Rectangle)).IgnoreGravity = true; 
+            //en.AddComponent(new Sprite(Global.ContentLoader.Images[0].Texture2D));
+            Console.WriteLine();
+            Global.ContentLoader.Images[0].PrintInfos();
+
         }
 
         private void InstantiateEntities()
@@ -40,6 +46,9 @@ namespace Game1
             // Quick Quit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Global.Game.Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                en.GetComponent<Sprite>().ChangeImage(null);
 
             // TODO do a camera controller
             CameraMovement((float)gameTime.ElapsedGameTime.TotalSeconds);

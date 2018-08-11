@@ -11,38 +11,46 @@ namespace Game1.Engine
 		public Color Color;
 		public float SortingOrder = 1;
 		public Vector2 Origin;
-		public bool scaleWithZoom = true;
+		public bool scaleWithCamera = true;
 
-		#region Constructors
-		public Sprite(Texture2D image = null, Color color = new Color(), int size = 16, float sortingOrder = 0)
+        private Vector2 imgRatio;
+
+        #region Constructors
+        public Sprite(Texture2D image = null, float sortingOrder = 0)
 		{
-			if (image != null)
-				Image = image;
-			else
-				Image = CreateTexture(size, size, Color.White);
+			if (image == null)
+                image = CreateTexture(16, 16, Color.White);
 			Color = Color.White;
-			SetDefaultOrigin();
+            ChangeImage(image);
 		}
 
 		public Sprite(int size)
 		{
-			Image = CreateTexture(size, size, Color.White);
-			Color = Color.White;
-			SetDefaultOrigin();
+            Color = Color.White;
+            ChangeImage(CreateTexture(size, size, Color.White));
 		}
 		#endregion
+
+        public void ChangeImage(Texture2D image)
+        {
+            if (image == null)
+                image = CreateTexture(16, 16, Color.White);
+            Image = image;
+            imgRatio = ImageRatio(image);
+            SetDefaultOrigin();
+        }
 
 		public void DrawSprite(SpriteBatch sprBatch)
 		{
 			Rectangle destRect;
 
-			if (scaleWithZoom)
+            if (scaleWithCamera)
 			{
 				// For classic sprites
 				int wtds = Global.WorldToDrawScale;
 				destRect = new Rectangle(
 					new Point((int)(Entity.Position.X * wtds), (int)(Entity.Position.Y * wtds)),
-					new Point((int)(Entity.Scale.X * wtds), (int)(Entity.Scale.Y * wtds)));
+					new Point((int)(Entity.Scale.X * wtds * imgRatio.X), (int)(Entity.Scale.Y * wtds * imgRatio.Y)));
 			}  
 			else
 			{
@@ -72,6 +80,14 @@ namespace Game1.Engine
 		}
 
 		#region Static Sprite Methods
+        public Vector2 ImageRatio(Texture2D spr)
+        {
+            if (spr.Width > spr.Height)
+                return new Vector2((float)spr.Width / (float)spr.Height, 1);
+            else
+                return new Vector2(1, (float)spr.Height / (float)spr.Width);
+        }
+
 		public static Texture2D CreateTexture(int width, int height, Color color)
 		{
 			// Get the graphics device used by the current game

@@ -12,7 +12,7 @@ namespace Game1.Engine
         public UIElement() : base ()
 		{
             sprite = AddComponent(new Sprite());
-			sprite.scaleWithZoom = false; // UI is fixed on the screen
+			sprite.scaleWithCamera = false; // UI is fixed on the screen
 			sprite.SortingOrder = 0; // in front
 
             boxCollider = AddComponent(new BoxCollider());

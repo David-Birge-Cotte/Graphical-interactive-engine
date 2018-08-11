@@ -84,7 +84,9 @@ namespace Game1.Engine
 				throw new Exception($"Entity {entity.Name} is not in the gameObjects list<Entity>");
 			gameObjects.Remove(entity);
 			entity.OnDestroy();
-		}
+            entity = null;
+
+        }
 
 		/// <summary>
 		/// Draw the scene to the screen. Called by Game

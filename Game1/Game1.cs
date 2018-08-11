@@ -10,13 +10,13 @@ using Game1.GameObjects;
 namespace Game1
 {
     /// <summary>
-    /// This is the main type for your game.
+    /// This is the main type of the program.
     /// </summary>
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private Scene mainScene; // This is where the game takes place
+        private Scene mainScene;
 
         /// <summary>
         /// Initializes the game with compile-time settings
@@ -24,19 +24,23 @@ namespace Game1
         public Game1()
         {
 			Global.Game = this;
-            
-            graphics = new GraphicsDeviceManager(this);
+  
             Content.RootDirectory = "Content";
             IsMouseVisible = Global.IsCursorVisible;
 			IsFixedTimeStep = true;
 			TargetElapsedTime = TimeSpan.FromSeconds(1d / Global.TargetFrameRate);
 
-			graphics.GraphicsProfile = GraphicsProfile.HiDef; 
+            graphics = new GraphicsDeviceManager(this);
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.PreferMultiSampling = true;
-			graphics.IsFullScreen = Global.IsFullscreen;
-			graphics.PreferredBackBufferWidth = Global.WinWidth;
+            graphics.IsFullScreen = Global.IsFullscreen;
+            graphics.PreferredBackBufferWidth = Global.WinWidth;
             graphics.PreferredBackBufferHeight = Global.WinHeight;
             graphics.ApplyChanges();
+
+            Console.WriteLine($"---------------------------------------------------------------");
+            Console.WriteLine($"--- Welcome to the GIE, the graphical interactive engine ! ----");
+            Console.WriteLine($"---------------------------------------------------------------");
         }
 
         /// <summary>
@@ -47,9 +51,9 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            // Starts the game scene
-            mainScene = new Scene01();
             base.Initialize();
+            // Starts the game scene
+            mainScene = new NeuralEntities_test01();
         }
 
         /// <summary>
@@ -58,20 +62,8 @@ namespace Game1
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-            // have a loader for loading textures corresponding to the required scene etc..
-
-            // This is just a test to read a file
-            /*
-            string path = Global.AppPath;
-            if (String.Compare(path.Substring(path.Length - 1, 1), "\\") != 0)
-                path = path + "\\";
-            string fileText = File.ReadAllText(path + "data\\test.txt");
-            Console.WriteLine(fileText);
-            */
+            Global.ContentLoader = new ContentLoader();
         }
 
         /// <summary>

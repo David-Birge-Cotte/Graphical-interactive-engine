@@ -40,6 +40,10 @@ namespace Game1.Engine
 		{
 			get => _physicsBody.Rotation; set => _physicsBody.Rotation = value;
 		}
+        public bool FixedRotation
+        {
+            get => _physicsBody.FixedRotation; set => _physicsBody.FixedRotation = value;
+        }
 		private World _world;
 		private BodyShape _shape;
 		private Body _physicsBody;

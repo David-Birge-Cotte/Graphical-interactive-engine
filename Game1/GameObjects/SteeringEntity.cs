@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Game1.Engine;
+using Game1.Engine.MachineLearning;
 using Microsoft.Xna.Framework;
 
 namespace Game1.GameObjects
 {
 	class SteeringEntity : Entity
     {
-		RigidBody rb2d;
+        public NeuralNetwork Brain;
+		public RigidBody Rb2d;
 		Sprite sprite;
         
 		float maxForce = 50;
-		float maxSpeed = 1000;
+		float maxSpeed = 10;
+
+        public float energy = 10;
 
         public SteeringEntity() : base()
         {
@@ -20,31 +24,46 @@ namespace Game1.GameObjects
 
 		public override void Initialize()
 		{
-			Position = new Vector2(Noise.Gaussian(-10, 10), Noise.Gaussian(-5, 0));
+            // 2 input neurons -> 1 layer of 2 hidden neurons -> 2 output neurons
+            Brain = new NeuralNetwork(2, 2, 2);
+
+            Position = new Vector2(
+                Noise.Gaussian(-Global.WinWidth / 2, Global.WinWidth / 2), 
+                Noise.Gaussian(-Global.WinHeight / 2, Global.WinHeight / 2)) / 10f;
 
             sprite = AddComponent(new Sprite());
             sprite.Color = Noise.RandomGaussianColor();
-            
-			int mass = Noise.Gaussian(1, 5);
-			Scale = new Vector2(mass / 2f, mass / 2f);
 
-			rb2d = AddComponent(new RigidBody(Scene.World));
-			rb2d.Mass = mass;
+			Rb2d = AddComponent(new RigidBody(Scene.World, BodyShape.Rectangle));
+			Rb2d.Mass = 1;
+            Rb2d.FixedRotation = true;
 
-			rb2d.IgnoreGravity = true;
+			Rb2d.IgnoreGravity = true;
 
 			base.Initialize();
 		}
 
 		public override void Update(float dt)
         {
-			rb2d.AddForce(Seek(Global.WorldMousePos));
+            energy -= dt;
 
             base.Update(dt);
         }
 
+        public void BrainMovement(Entity closestFood)
+        {
+            Vector2 dir = closestFood.Position - Position;
+            Vector2 firstInputs = dir;
+            
+            float[] inputs = { firstInputs.X, firstInputs.Y };
+            float[] outputs = Brain.FeedForward(inputs);
+            Vector2 outputMvr = new Vector2(outputs[0], outputs[1]);
 
-        // TODO refactor, use modular system
+            outputMvr.Normalize();
+            Rb2d.AddForce(SeekDesired(outputMvr));
+        }
+
+
         /// <summary>
         /// OLD VERSION 
         /// </summary>
@@ -55,11 +74,21 @@ namespace Game1.GameObjects
             Vector2 desiredVelocity;
             Vector2 steering;
 
-			desiredVelocity = target - rb2d.Position;
+			desiredVelocity = target - Rb2d.Position;
 			desiredVelocity = desiredVelocity.SetMagnitude(maxSpeed);
 
-			steering = desiredVelocity - rb2d.Velocity;
+			steering = desiredVelocity - Rb2d.Velocity;
 			steering = steering.Limit(maxForce);
+            return (steering);
+        }
+
+        public Vector2 SeekDesired(Vector2 desiredVelocity)
+        {
+            Vector2 steering;
+
+            desiredVelocity = desiredVelocity.SetMagnitude(maxSpeed);
+            steering = desiredVelocity - Rb2d.Velocity;
+            steering = steering.Limit(maxForce);
             return (steering);
         }
     }
