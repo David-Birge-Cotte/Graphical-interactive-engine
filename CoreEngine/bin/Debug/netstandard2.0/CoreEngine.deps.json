@@ -1,0 +1,82 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.0/",
+    "signature": "50003413949252ae8d5e2596fbd826de154c4d1a"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.0": {},
+    ".NETStandard,Version=v2.0/": {
+      "CoreEngine/1.0.0": {
+        "dependencies": {
+          "MonoGame.Content.Builder": "3.7.0.4",
+          "MonoGame.Framework.DesktopGL.Core": "3.7.0.7",
+          "MoonSharp": "2.0.0",
+          "NETStandard.Library": "2.0.1"
+        },
+        "runtime": {
+          "CoreEngine.dll": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "MonoGame.Content.Builder/3.7.0.4": {},
+      "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
+        "runtime": {
+          "lib/netstandard2.0/MonoGame.Framework.dll": {}
+        }
+      },
+      "MoonSharp/2.0.0": {
+        "runtime": {
+          "lib/netstandard1.6/MoonSharp.Interpreter.dll": {}
+        }
+      },
+      "NETStandard.Library/2.0.1": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CoreEngine/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "MonoGame.Content.Builder/3.7.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YUCjzVm/ROTqxw9zHsYM3P/2UBAPMYxa7xMGiyKkmlV/OtSbFM2z4nIJ5we2ZMRXej+5EbY8CLEKiRvWaf4s4g==",
+      "path": "monogame.content.builder/3.7.0.4",
+      "hashPath": "monogame.content.builder.3.7.0.4.nupkg.sha512"
+    },
+    "MonoGame.Framework.DesktopGL.Core/3.7.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-juPb6yv+N362liHMbYQavmlhLzufpGGvNQqcpDGEs4BzRiycBXXjhZjCwpUekx0ozLfQ+kjirnuA3/M2lc4tMQ==",
+      "path": "monogame.framework.desktopgl.core/3.7.0.7",
+      "hashPath": "monogame.framework.desktopgl.core.3.7.0.7.nupkg.sha512"
+    },
+    "MoonSharp/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iSuzvLpNPiuUqe+vRydOavtfA7CmhhpCL6h/LOnmPcQGLSEnh8P6BmGyUokKFg/Z7ACbwTRFN8XLfC8c0VH/hA==",
+      "path": "moonsharp/2.0.0",
+      "hashPath": "moonsharp.2.0.0.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oA6nwv9MhEKYvLpjZ0ggSpb1g4CQViDVQjLUcDWg598jtvJbpfeP2reqwI1GLW2TbxC/Ml7xL6BBR1HmKPXlTg==",
+      "path": "netstandard.library/2.0.1",
+      "hashPath": "netstandard.library.2.0.1.nupkg.sha512"
+    }
+  }
+}
