@@ -1,8 +1,0 @@
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/obj/Debug/netstandard2.0/CoreEngine.csproj.CoreCompileInputs.cache
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/obj/Debug/netstandard2.0/CoreEngine.AssemblyInfoInputs.cache
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/obj/Debug/netstandard2.0/CoreEngine.AssemblyInfo.cs
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/bin/Debug/netstandard2.0/CoreEngine.deps.json
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/bin/Debug/netstandard2.0/CoreEngine.dll
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/bin/Debug/netstandard2.0/CoreEngine.pdb
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/obj/Debug/netstandard2.0/CoreEngine.dll
-/Users/davidbc/Documents/MonoGame/MonogameEngine/CoreEngine/obj/Debug/netstandard2.0/CoreEngine.pdb
