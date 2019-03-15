@@ -1,11 +1,14 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 using CoreEngine.ECS;
+using CoreEngine.Lua;
 
 namespace CoreEngine
 {
@@ -16,8 +19,11 @@ namespace CoreEngine
         public static GraphicsDeviceManager Graphics { get; private set; }
         public static int WorldToDrawScale = 32;
         public static ContentLoader ContentLoader;
-        // Scene
-        public Scene scene;
+        public ApplicationAPI API;
+
+        public Input Input;
+        //public Scene Scene;
+        public List<Scene> Scenes = new List<Scene>();
 
         // Content
         public static string ContentDirectory 
@@ -33,43 +39,52 @@ namespace CoreEngine
         {
             Instance = this;
 
-            Window.Title = windowTitle;
-            IsMouseVisible = true;
-            Content.RootDirectory = "Content";
             Graphics = new GraphicsDeviceManager(this);
             Graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            Lua.LuaEnvManagement.RegisterTypes();
+            Input = new Input();
+            Content.RootDirectory = "Content";
+            LuaEnvManagement.RegisterTypes();
+            Window.Title = windowTitle;
+            IsMouseVisible = true;
+            API = new ApplicationAPI(this);
 
             if (fullscreen) 
                 SetFullScreen();
             else 
                 SetWindowed(width, height);
 
-            scene = new Scene(this);
+            Scene.LaunchScene("default-scene");
         }
 
         protected override void Initialize()
         {
             ContentLoader = new ContentLoader();
-            scene.Initialize();
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            scene.LoadContent();
             base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            scene.Update(gameTime);
+            for (int i = 0; i < Scenes.Count; i++)
+                Scenes[i].Update(gameTime);
+
+            // default global quit button
+            if (Input.IsKeyPressed(Keys.Escape))
+                Exit();
+
+            Input.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            scene.Draw();
+            Application.Instance.GraphicsDevice.Clear(Color.TransparentBlack);
+            for (int i = 0; i < Scenes.Count; i++)
+                Scenes[i].Draw();
             base.Draw(gameTime);
         }
 

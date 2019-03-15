@@ -16,12 +16,12 @@ namespace CoreEngine
             DirectoryInfo scenesDirectory =  
                 new DirectoryInfo(Path.Combine(contentDirectory.FullName, "scenes"));
             if (!scenesDirectory.Exists)
-                return "print('error, no scenes directory')";
+                return ($"print('error, no scenes directory')");
             
             DirectoryInfo sceneDirectory = 
                 new DirectoryInfo(Path.Combine(scenesDirectory.FullName, sceneName));
             if (!sceneDirectory.Exists)
-                return "print('error, no scene directory')";
+                return ($"print('error, no scene { sceneName } directory')");
             
             
             var files = sceneDirectory.GetFiles();

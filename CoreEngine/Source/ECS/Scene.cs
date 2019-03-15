@@ -11,56 +11,62 @@ namespace CoreEngine.ECS
 {
     public class Scene
     {
-        private Application app;
         private SpriteBatch spriteBatch;
-        public Color ClearColor;
+        public string Name;
         public Entity RootEntity { get; private set; }
         public Camera ActiveCamera { get; set; }
         public List<Sprite> Sprites = new List<Sprite>();
+        public bool IsActive = true;
         public SceneAPI API;
 
-        public Scene(Application app)
+        public static Scene LaunchScene(string sceneName = "default-scene")
         {
-            this.app = app;
-            ClearColor = Noise.RandomGaussianColor();
+            var scene = new Scene();
+
+            scene.Name = sceneName;
+            Application.Instance.Scenes.Add(scene);
+            scene.Initialize();
+            scene.LoadContent();
+            return (scene);
+        }
+
+        public Scene()
+        {
             API = new SceneAPI(this);
         }
 
         public void Initialize()
         {
             RootEntity = new Entity("root");
+            RootEntity.Scene = this;
 
-            string sceneScript = FileLoader.LoadScene("my-scene");
-            RootEntity.AddComponent(new Scriptable(sceneScript));
- 
             // Put a default camera on the root entity
-            var defaultCam = RootEntity.AddComponent(new Camera());
-            ActiveCamera = defaultCam;
+            ActiveCamera = RootEntity.AddComponent(new Camera());
+
+            string sceneScript = FileLoader.LoadScene(Name);
+            RootEntity.AddComponent(new Scriptable(sceneScript)); // Load scene script
         }
 
         public void LoadContent()
         {
-            spriteBatch = new SpriteBatch(app.GraphicsDevice);
+            spriteBatch = new SpriteBatch(Application.Instance.GraphicsDevice);
         }
 
         public void Update(GameTime gameTime)
         {
+            if(!IsActive)
+                return;
+
             // Get Delta Time
 			float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Update
             RootEntity.Update(dt);
             RootEntity.PostUpdate(dt);
-
-            // default quit button
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                app.Exit();
         }
 
         public void Draw()
         {
-            app.GraphicsDevice.Clear(ClearColor);
-
             if (ActiveCamera == null)
                 return;
 

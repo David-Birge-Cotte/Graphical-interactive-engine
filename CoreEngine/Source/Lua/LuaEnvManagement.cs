@@ -14,17 +14,18 @@ namespace CoreEngine.Lua
         {
             // Static types or enums
             UserData.RegisterType<Vector2>();
-			UserData.RegisterType<KeyboardState>();
 			UserData.RegisterType<Keys>();
-            UserData.RegisterType<Color>(); // should do an API
+            UserData.RegisterType<Color>(); // should maybe do an API or extentions for fake constructors
 
             // Direct access
             UserData.RegisterType<Transform>();
+            UserData.RegisterType<Input>();
 
             // API
             UserData.RegisterType<EntityAPI>();
             UserData.RegisterType<SceneAPI>();
             UserData.RegisterType<SpriteAPI>();
+            UserData.RegisterType<ApplicationAPI>();
         }
 
         public static void AddAPI_ECS(Script script, Entity en)
@@ -32,8 +33,10 @@ namespace CoreEngine.Lua
 			script.Globals["Vector2"] = typeof(Vector2); // Static
 			script.Globals["Keys"] = UserData.CreateStatic<Keys>();
 
+            script.Globals.Set("input", UserData.Create(Application.Instance.Input));
+			script.Globals.Set("scene", UserData.Create(en.Scene.API));
             script.Globals.Set("entity", UserData.Create(en.API));
-			script.Globals.Set("scene", UserData.Create(Application.Instance.scene.API));
+            script.Globals.Set("app", UserData.Create(Application.Instance.API));
         }
     }
 }

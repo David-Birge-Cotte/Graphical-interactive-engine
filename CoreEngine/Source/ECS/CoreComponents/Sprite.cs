@@ -20,17 +20,17 @@ namespace CoreEngine.ECS
 		public SpriteAPI API;
 
         #region Constructors
-        public Sprite(Texture2D image = null, float sortingOrder = 0)
+        public Sprite(Scene scene, Texture2D image = null, float sortingOrder = 0)
 		{
-			Application.Instance.scene.Sprites.Add(this);
+			scene.Sprites.Add(this);
 			Color = Color.White;
             ChangeImage(image);
 			API = new SpriteAPI(this);
 		}
 
-		public Sprite(int size)
+		public Sprite(Scene scene, int size)
 		{
-			Application.Instance.scene.Sprites.Add(this);
+			scene.Sprites.Add(this);
             Color = Color.White;
             ChangeImage(CreateTexture(size, size, Color.White));
 			API = new SpriteAPI(this);
@@ -63,7 +63,7 @@ namespace CoreEngine.ECS
 				destRect,
 				null,
 				Color,
-				Entity.Transform.Rotation,
+				(float)(Math.PI * Entity.Transform.Rotation / 180f),
 				Origin,
 				SpriteEffects.None, 
 				SortingOrder);

@@ -13,30 +13,33 @@ namespace CoreEngine.ECS
     public class Entity
     {
         public string Name;
-        public Guid ID = new Guid();
+        public Guid ID;
         public Transform Transform;
         public Entity Parent;
         public List<Entity> Children;
         public List<Component> Components;
         public bool IsActive = true;
+        public Scene Scene;
         public EntityAPI API;
 
-        public static Entity Instantiate(string name = "entity", Entity parent = null)
+        public static Entity Instantiate(Scene scene, string name = "entity", Entity parent = null)
         {
             Entity en;
 
             if(parent == null)
-                parent = Application.Instance.scene.RootEntity; // Make it at the scene's root
+                parent = scene.RootEntity; // Make it at the scene's root
 
             en = new Entity(name);
             parent.Children.Add(en);
             en.Parent = parent;
             en.Transform.SetParent(parent.Transform);
+            en.Scene = scene;
             return en;
         }
 
         public Entity(string name = "")
         {
+            ID = new Guid();
             Name = name;
             Transform = new Transform();
             Children = new List<Entity>();

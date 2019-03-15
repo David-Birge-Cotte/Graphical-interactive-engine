@@ -30,8 +30,8 @@ namespace CoreEngine.ECS
 			LuaEnvManagement.AddAPI_ECS(LuaScript.Script, entity);
 
 			// register Lua functions
-			LuaScript.FuncInitialize = LuaScript.Script.Globals.Get("initialize");
-			LuaScript.FuncUpdate = LuaScript.Script.Globals.Get("update");
+			LuaScript.FuncInitialize = LuaScript.Script.Globals.Get("_initialize");
+			LuaScript.FuncUpdate = LuaScript.Script.Globals.Get("_update");
 
 			// call Lua initialize
 			if(LuaScript.FuncInitialize.IsNotNil())
@@ -40,7 +40,6 @@ namespace CoreEngine.ECS
 
 		public override void Update(float dt)
 		{
-			LuaScript.Script.Globals["Keyboard"] = Keyboard.GetState();
 			LuaScript.Script.Globals["dt"] = dt;
 
 			// call Lua update
