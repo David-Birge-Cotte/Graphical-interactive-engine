@@ -14,7 +14,7 @@ namespace CoreEngine.ECS
 		// Public
 		public Texture2D Image;
 		public Color Color;
-		public float SortingOrder = 1;
+		public float SortingOrder = 0.5f; // 0 front, 1 back
 		public Vector2 Origin;
         private Vector2 imgRatio;
 		public SpriteAPI API;
@@ -24,7 +24,7 @@ namespace CoreEngine.ECS
 		{
 			scene.Sprites.Add(this);
 			Color = Color.White;
-            ChangeImage(image);
+            ChangeImage(image, Application.PixelsPerUnit);
 			API = new SpriteAPI(this);
 		}
 
@@ -32,15 +32,15 @@ namespace CoreEngine.ECS
 		{
 			scene.Sprites.Add(this);
             Color = Color.White;
-            ChangeImage(CreateTexture(size, size, Color.White));
+            ChangeImage(CreateTexture(size, size, Color.White), Application.PixelsPerUnit);
 			API = new SpriteAPI(this);
 		}
 		#endregion
 
-        public void ChangeImage(Texture2D image)
+        public void ChangeImage(Texture2D image, int ppu = 1)
         {
             if (image == null)
-                image = CreateTexture(64, 64, Color);
+                image = CreateTexture(ppu, ppu, Color);
             Image = image;
             imgRatio = ImageRatio(image);
             SetDefaultOrigin();
@@ -50,12 +50,12 @@ namespace CoreEngine.ECS
 		{
 			Rectangle destRect;
 
-            int wtds = Application.WorldToDrawScale;
+            int ppu = Application.PixelsPerUnit;
             destRect = new Rectangle(
-                new Point((int)(Entity.Transform.Position.X * wtds), 
-                            (int)(Entity.Transform.Position.Y * wtds)),
-                new Point((int)(Entity.Transform.Scale.X * wtds * imgRatio.X), 
-                            (int)(Entity.Transform.Scale.Y * wtds * imgRatio.Y)));
+                new Point((int)(Entity.Transform.Position.X * ppu), 
+                            (int)(Entity.Transform.Position.Y * ppu)),
+                new Point((int)(Entity.Transform.Scale.X * Image.Width),
+                            (int)(Entity.Transform.Scale.Y * Image.Height)));
 
 			// Draw to the SpriteBatch
 			sprBatch.Draw(
@@ -76,8 +76,17 @@ namespace CoreEngine.ECS
 			return (Origin);
 		}
 
+		public void ChangeTextureData(Color[] pixels, int height, int width)
+		{
+			Image = new Texture2D(Application.Graphics.GraphicsDevice, 
+					height, width);
+			Image.SetData(pixels);
+			imgRatio = ImageRatio(Image);
+			SetDefaultOrigin();
+		}
+
 		#region Static Sprite Methods
-        public Vector2 ImageRatio(Texture2D spr)
+        public static Vector2 ImageRatio(Texture2D spr)
         {
             if (spr.Width > spr.Height)
                 return new Vector2((float)spr.Width / (float)spr.Height, 1);
@@ -94,15 +103,15 @@ namespace CoreEngine.ECS
 			Texture2D texture = new Texture2D(device, width, height);
 
 			//the array holds the color for each pixel in the texture
-			Color[] data = new Color[width * height];
-			for (int pixel = 0; pixel < data.Length; pixel++)
+			Color[] pixels = new Color[width * height];
+			for (int i = 0; i < pixels.Length; i++)
 			{
 				//the function applies the color according to the specified pixel
-				data[pixel] = color;
+				pixels[i] = color;
 			}
 
 			//set the color
-			texture.SetData(data);
+			texture.SetData(pixels);
 
 			return texture;
 		}

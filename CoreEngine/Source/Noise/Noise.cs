@@ -93,7 +93,7 @@ namespace CoreEngine
 
 		public static Color RandomColor()
 		{
-			return new Color(Generate(255), Generate(255), Generate(255), Generate(255));
+			return new Color(Generate(255), Generate(255), Generate(255), 255);
 		}
 		
 		public static Color RandomGaussianColor(bool alpha = false)

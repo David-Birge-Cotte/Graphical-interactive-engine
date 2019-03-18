@@ -19,33 +19,19 @@ namespace CoreEngine.ECS
 
         public Scriptable(string script)
         {
-			LuaScript = new LuaScript();
-			LuaScript.Script.DoString(script);
+			LuaScript = new LuaScript(script);
         }
 
 		public override void Initialize(Entity entity)
 		{
+			LuaScript.AddAPI(entity);
+			LuaScript.Initialize();
 			base.Initialize(entity);
-
-			LuaEnvManagement.AddAPI_ECS(LuaScript.Script, entity);
-
-			// register Lua functions
-			LuaScript.FuncInitialize = LuaScript.Script.Globals.Get("_initialize");
-			LuaScript.FuncUpdate = LuaScript.Script.Globals.Get("_update");
-
-			// call Lua initialize
-			if(LuaScript.FuncInitialize.IsNotNil())
-				LuaScript.Script.Call(LuaScript.FuncInitialize);
 		}
 
 		public override void Update(float dt)
 		{
-			LuaScript.Script.Globals["dt"] = dt;
-
-			// call Lua update
-			if(LuaScript.FuncUpdate.IsNotNil())
-				LuaScript.Script.Call(LuaScript.FuncUpdate);
-
+			LuaScript.Update(dt);
 			base.Update(dt);
 		}
 	}

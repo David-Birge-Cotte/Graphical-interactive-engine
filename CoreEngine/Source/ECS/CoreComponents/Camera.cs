@@ -32,7 +32,7 @@ namespace CoreEngine.ECS
 		public Vector2 ScreenToWorld(Vector2 pos)
 		{
 			return new Vector2(Transform.Position.X + (pos.X - viewport.Width / 2) / Zoom, 
-							   Transform.Position.Y + (pos.Y - viewport.Height / 2) / Zoom) / Application.WorldToDrawScale;
+							   Transform.Position.Y + (pos.Y - viewport.Height / 2) / Zoom) / Application.PixelsPerUnit;
 		}
     }
 }

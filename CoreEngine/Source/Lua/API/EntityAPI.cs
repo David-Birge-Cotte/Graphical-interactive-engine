@@ -48,6 +48,16 @@ namespace CoreEngine.Lua
             return Entity.Transform.Rotation;
         }
 
+        public void Scale(float x, float y)
+        {
+            Entity.Transform.LocalScale = new Vector2(x, y);
+        }
+
+        public Vector2 GetScale()
+        {
+            return Entity.Transform.LocalScale;
+        }
+
         public SpriteAPI AddSpriteComponent()
         {
             var spr = Entity.AddComponent(new Sprite(Entity.Scene));

@@ -21,5 +21,17 @@ namespace CoreEngine.Lua
             var scene = Scene.LaunchScene(sceneName);
             return (scene.API);
         }
+
+        public Vector2 GetScreenSize()
+        {
+            return (new Vector2
+                (Application.Graphics.PreferredBackBufferWidth, 
+                Application.Graphics.PreferredBackBufferHeight));
+        }
+
+        public int GetPixelsPerUnit()
+        {
+            return Application.PixelsPerUnit;
+        }
     }
 }

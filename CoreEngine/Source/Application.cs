@@ -17,7 +17,7 @@ namespace CoreEngine
         // References
         public static Application Instance { get; private set; }
         public static GraphicsDeviceManager Graphics { get; private set; }
-        public static int WorldToDrawScale = 32;
+        public static int PixelsPerUnit = 16;
         public static ContentLoader ContentLoader;
         public ApplicationAPI API;
 

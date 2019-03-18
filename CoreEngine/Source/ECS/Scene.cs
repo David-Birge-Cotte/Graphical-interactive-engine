@@ -67,14 +67,17 @@ namespace CoreEngine.ECS
 
         public void Draw()
         {
+            // Do not render if there is no camera
             if (ActiveCamera == null)
                 return;
 
             // Draw Game Objects in scene
             spriteBatch.Begin(
                 SpriteSortMode.BackToFront,
-                BlendState.AlphaBlend, null, null, null, null,
-                ActiveCamera.GetTransformation());
+                BlendState.AlphaBlend,
+                null, //SamplerState.PointClamp, // filtering type for pixel art or smooth HD
+                null, null, null, // default values
+                ActiveCamera.GetTransformation()); // draw from camera point of view
             DrawEntities(); // Draw the scene
             spriteBatch.End();
         }
